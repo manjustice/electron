@@ -1,0 +1,4 @@
+{% for category in category_list %}
+  <a href="{% url "electron:product-list" pk=category.id %}">{{ category.name }}</a><br>
+  <img src="{{ category.image }}" alt="">
+{% endfor %}

@@ -20,6 +20,11 @@ class User(AbstractUser):
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
+    image = models.ImageField(upload_to="images/")
+
+    class Meta:
+        verbose_name = "category"
+        verbose_name_plural = "categories"
 
     def __str__(self):
         return self.name
@@ -44,7 +49,7 @@ class Cart(models.Model):
     product = models.ManyToManyField(
         Product,
         related_name="carts",
-        through="OrderItem"
+        through="CartItem"
     )
 
 
@@ -61,9 +66,9 @@ class Order(models.Model):
     )
 
 
-class Image(models.Model):
-    image = models.ImageField(upload_to='images')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+# class Image(models.Model):
+#     image = models.ImageField(upload_to='images')
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
 
 class OrderItem(models.Model):
