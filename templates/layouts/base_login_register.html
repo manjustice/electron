@@ -12,7 +12,9 @@
 <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
 
 <title>
-  Electron - Sign Up
+  {% block title %}
+
+  {% endblock %}
 </title>
 <!--     Fonts and icons     -->
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -34,10 +36,5 @@
   {% block content %}
   
   {% endblock %}
-
-  {% block footer %}
-
-  {% endblock footer %}
-
 </body>
 </html>

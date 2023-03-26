@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block title %}
+  {{ product_list.first.category.name }} - Electron
+{% endblock %}
+
 {% block content %}
 
   {% for product in product_list %}
