@@ -1,1 +1,21 @@
-{{ product.name }}
+{% extends "base.html" %}
+
+{% block content %}
+  {{ product.name }}
+<div class="sim-slider">
+     <ul class="sim-slider-list">
+{#         <li><img src="screen.gif" alt="screen"></li>    <!-- это экран -->#}
+          {% for image in product.images.all %}
+{#            <li class="sim-slider-element"><img src="/{{ image.image }}" alt="1"></li>#}
+          {% endfor %}
+     </ul>
+     <div class="sim-slider-arrow-left"></div>
+     <div class="sim-slider-arrow-right"></div>
+     <div class="sim-slider-dots"></div>
+</div>
+<form action="" method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button class="btn btn-primary" type="submit">Add to cart</button>
+</form>
+{% endblock %}

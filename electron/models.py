@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     phone_regex = RegexValidator(
-        regex=r'^\+?1?\d{9,15}$',
+        regex=r"^\+?1?\d{9,15}$",
         message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."
     )
     phone_number = models.CharField(
@@ -64,20 +64,41 @@ class Order(models.Model):
         related_name="orders",
         through="OrderItem"
     )
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
-# class Image(models.Model):
-#     image = models.ImageField(upload_to='images')
-#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+class Image(models.Model):
+    image = models.ImageField(upload_to="images/products/")
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name="images"
+    )
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    amount = models.IntegerField(default=1)
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.CASCADE,
+        related_name="order_item"
+    )
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name="order_item"
+    )
+    amount = models.IntegerField(default=0)
 
 
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    cart = models.ForeignKey(
+        Cart,
+        on_delete=models.CASCADE,
+        related_name="cart_item"
+    )
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name="cart_item"
+    )
     amount = models.IntegerField()

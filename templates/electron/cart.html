@@ -1,10 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}
+  Shopping Cart - Online Electronic Shopping
+{% endblock %}
 
-</body>
-</html>
+{% block content %}
+    {% if cart_items %}
+      <table class="table">
+        <tr>
+          <th>ID</th>
+          <th>Product</th>
+          <th>Amount</th>
+          <th>Price</th>
+          <th>Sum</th>
+        </tr>
+        <tr>
+        {% for item in cart_items %}
+            <td>{{ item.product.id }}</td>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.amount }}</td>
+            <td>{{ item.product.price }}</td>
+            <td>{% widthratio item.amount 1 item.product.price %}</td>
+        {% endfor %}
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Total sum</td>
+            <td>{{ sum_cart }}</td>
+         </tr>
+        </table>
+        <div class="container-fluid px-0 overflow-hidden">
+          <div class="row text-center py-2 mt-3">
+            <div class="col-12 mx-auto">
+                <form action="" method="post" style="display: block; margin-left: auto; margin-right: auto;">
+                  {% csrf_token %}
+                  <button class="btn btn-primary" type="submit">Make a Purchase</button>
+                </form>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <p>You don't have any products in cart</p>
+    {% endif %}
+{% endblock %}

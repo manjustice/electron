@@ -1,8 +1,10 @@
 {% extends "base.html" %}
-
+{% block title %}
+  Order List - Online Electronic Shopping
+{% endblock %}
 {% block content %}
   {% for order in order_list %}
     {{ order.id }}
   {% endfor %}
-
+{% include "includes/pagination.html" %}
 {% endblock %}
