@@ -22,4 +22,10 @@ class RegistrationView(generic.CreateView):
 def custom_login(request):
     if request.user.is_authenticated:
         return redirect('electron:category-list')
-    return auth_views.LoginView.as_view()
+    return auth_views.LoginView.as_view()(request)
+
+
+def custom_logout(request):
+    if not request.user.is_authenticated:
+        return redirect('electron:category-list')
+    return auth_views.LogoutView.as_view()(request)

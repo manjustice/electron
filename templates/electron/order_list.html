@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% for order in order_list %}
+    {{ order.id }}
+  {% endfor %}
+
+{% endblock %}
