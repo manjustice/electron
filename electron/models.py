@@ -111,3 +111,7 @@ class CartItem(models.Model):
         related_name="cart_item"
     )
     amount = models.IntegerField()
+
+    @staticmethod
+    def count_items_in_cart(user_id):
+        return CartItem.objects.filter(cart__user_id=user_id).count()

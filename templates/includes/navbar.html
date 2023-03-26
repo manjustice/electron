@@ -18,11 +18,16 @@
             Catalog
           </a>
         </li>
+       <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" role="button" href="{% url "electron:cart" %}">
         <li class="nav-item mx-2">
-          <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" role="button" href="{% url "electron:cart" %}">
             Shopping cart
-          </a>
         </li>
+        <h7 class="cart-count">
+          {% if items_in_cart %}
+            {{ items_in_cart }}
+          {% endif %}
+        </h7>
+       </a>
         {% if user.is_authenticated %}
 
           <li class="nav-item mx-2">
