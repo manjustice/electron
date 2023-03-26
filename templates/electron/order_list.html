@@ -1,10 +1,40 @@
 {% extends "base.html" %}
 {% block title %}
-  Order List - Online Electronic Shopping
+  Order List - Electron
 {% endblock %}
 {% block content %}
   {% for order in order_list %}
-    {{ order.id }}
+
+    <div class="shadow">
+      <h3>Order №{{ order.id }} at {{ order.created_at }}</h3>
+      <table class="table" style="width: 100%">
+        <tr>
+          <th style="width: 4%">ID</th>
+          <th style="width: 50%">Product</th>
+          <th style="width: 10%">Amount</th>
+          <th style="width: 18%">Price</th>
+          <th style="width: 18%">Sum</th>
+        </tr>
+          {% for item in order.order_item.all %}
+            <tr>
+                <td>{{ item.product.id }}</td>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.amount }}</td>
+                <td>{{ item.product.price }}</td>
+                <td>{% widthratio item.amount 1 item.product.price %}</td>
+            </tr>
+          {% endfor %}
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Total sum</td>
+            <td>{{ order.total_sum }}</td>
+          </tr>
+        </table>
+    </div>
+
   {% endfor %}
+
 {% include "includes/pagination.html" %}
 {% endblock %}

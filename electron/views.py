@@ -118,3 +118,49 @@ def cart_view(request):
 class OrderList(generic.ListView):
     model = Order
     paginate_by = 5
+
+    def get_queryset(self):
+        # queryset = (super().get_queryset().prefetch_related(
+        #         'order_item', 'order_item__product'
+        #     ).annotate(
+        #         total_price=Sum(F('order_item__amount')
+        #                         * F('order_item__product__price'))
+        #     ).values(
+        #         'id', 'created_at', 'order_item__amount',
+        #         'order_item__product__id', 'order_item__product__price',
+        #         'total_price'
+        #     ))
+        # print(queryset.query)
+        queryset = super().get_queryset().prefetch_related(
+                'order_item', 'order_item__product'
+            )
+        return queryset
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # orders = {}
+        #
+        # for order_item in context["order_list"]:
+        #     key = (order_item["id"], order_item["created_at"])
+        #     value = [
+        #                 order_item["order_item__amount"],
+        #                 order_item["order_item__product__id"],
+        #                 order_item["order_item__product__price"],
+        #                 order_item["total_price"]
+        #             ]
+        #     order = orders.get(key)
+        #     if order:
+        #         orders[key].append(value)
+        #     else:
+        #         orders[key] = value
+        # print(orders)
+        # for order, items in orders.items():
+        #     total_sum_order = 0
+        #     # print(order)
+        #     # print(items)
+        #     orders[order].append((total_sum_order,))
+        #
+        # context["orders"] = orders
+        # # print(orders)
+        return context

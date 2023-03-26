@@ -5,26 +5,37 @@
 {% endblock %}
 
 {% block content %}
+  <section class="py-7">
     <div class="container">
-        <div class="row">
-            <div class="row">
-              {% for group in grouped_categories %}
-                {% for obj in group %}
-                    <div class="col-md-4 position-relative">
-                      <a href="{% url "electron:product-list" pk=obj.id %}">
-                        <div class="p-3 text-center">
-                          <img src="/{{ obj.image }}" alt="">
-                          <h5 class="mt-3">{{ obj.name }}</h5>
-                        </div>
-                      </a>
-                      {% if not forloop.last %}
-                        <hr class="vertical dark">
-                      {% endif %}
-                    </div>
-                  {% endfor %}
-              {% endfor %}
-            </div>
+      <div class="row justify-space-between py-2">
+        <div class="col-lg-4 mx-auto">
+          <input type="text" placeholder="Search product by name" class="form-control" >
         </div>
+      </div>
     </div>
+  </section>
+
+
+  <div class="container">
+      <div class="row">
+          <div class="row">
+            {% for group in grouped_categories %}
+              {% for obj in group %}
+                  <div class="col-md-4 position-relative">
+                    <a href="{% url "electron:product-list" pk=obj.id %}">
+                      <div class="p-3 text-center">
+                        <img src="/{{ obj.image }}" alt="">
+                        <h5 class="mt-3">{{ obj.name }}</h5>
+                      </div>
+                    </a>
+                    {% if not forloop.last %}
+                      <hr class="vertical dark">
+                    {% endif %}
+                  </div>
+                {% endfor %}
+            {% endfor %}
+          </div>
+      </div>
+  </div>
 
 {% endblock %}

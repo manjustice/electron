@@ -66,6 +66,15 @@ class Order(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ["-created_at"]
+
+    def total_sum(self):
+        return sum(
+            item.amount * item.product.price
+            for item in self.order_item.all()
+        )
+
 
 class Image(models.Model):
     image = models.ImageField(upload_to="images/products/")
