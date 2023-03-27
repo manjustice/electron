@@ -7,19 +7,33 @@
     {% if cart_items %}
       <table class="table">
         <tr>
-          <th>ID</th>
-          <th>Product</th>
-          <th>Amount</th>
-          <th>Price</th>
-          <th>Sum</th>
+          <th style="width: 4%">ID</th>
+          <th style="width: 50%">Product</th>
+          <th style="width: 13%">Amount</th>
+          <th style="width: 13%">Price</th>
+          <th style="width: 13%">Sum</th>
+          <th style="width: 7%"></th>
         </tr>
-        <tr>
         {% for item in cart_items %}
+          <tr>
             <td>{{ item.product.id }}</td>
             <td>{{ item.product.name }}</td>
             <td>{{ item.amount }}</td>
             <td>{{ item.product.price }}</td>
             <td>{% widthratio item.amount 1 item.product.price %}</td>
+            <td>
+              <form action="" method="post">
+                {% csrf_token %}
+                <a href="{% url "electron:delete-from-cart" pk=item.product.id %}" class="badge bg-gradient-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete form cart">
+                  <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g id="Edit / Remove_Minus_Circle">
+                  <path id="Vector" d="M8 12H16M12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </g>
+                </svg>
+                </a>
+              </form>
+            </td>
+          </tr>
         {% endfor %}
         <tr>
             <td></td>
@@ -27,6 +41,7 @@
             <td></td>
             <td>Total sum</td>
             <td>{{ sum_cart }}</td>
+            <td></td>
          </tr>
         </table>
         <div class="container-fluid px-0 overflow-hidden">

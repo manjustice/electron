@@ -144,9 +144,15 @@ class OrderList(LoginRequiredMixin, generic.ListView):
         return context
 
 
-def get_count_items(user_id=None):
+def delete_from_cart_view(request, pk):
+    CartItem.delete_item_from_cart(request.user.id, pk)
+    return redirect("electron:cart")
+
+
+def get_count_items(user_id: int = None) -> int:
     items_in_cart = 0
     if user_id:
         items_in_cart = CartItem.count_items_in_cart(user_id)
 
     return items_in_cart
+

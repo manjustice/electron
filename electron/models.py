@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import RegexValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -112,6 +113,20 @@ class CartItem(models.Model):
     )
     amount = models.IntegerField()
 
+    class Meta:
+        ordering = ["product__name"]
+
     @staticmethod
     def count_items_in_cart(user_id):
         return CartItem.objects.filter(cart__user_id=user_id).count()
+
+    @staticmethod
+    def delete_item_from_cart(user_id, product_id):
+        try:
+            cart_item = CartItem.objects.get(
+                cart__user_id=user_id,
+                product__id=product_id
+            )
+            cart_item.delete()
+        except ObjectDoesNotExist:
+            pass
