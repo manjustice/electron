@@ -22,11 +22,11 @@
         <li class="nav-item mx-2">
             Shopping cart
         </li>
-        <h7 class="cart-count">
-          {% if items_in_cart %}
-            {{ items_in_cart }}
+         {% if user.is_authenticated %}
+            <h7 class="cart-count">
+                {{ items_in_cart }}
+            </h7>
           {% endif %}
-        </h7>
        </a>
         {% if user.is_authenticated %}
 
@@ -58,4 +58,3 @@
   </div>
 </nav>
 <!-- End Navbar -->
-

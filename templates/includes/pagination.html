@@ -1,3 +1,5 @@
+{% load query_transform %}
+
 {% if is_paginated %}
   <section class="py-7">
     <div class="container">
@@ -6,7 +8,7 @@
           <ul class="pagination pagination-primary m-4">
             {% if page_obj.has_previous %}
               <li class="page-item">
-                <a class="page-link" href="?page= {{ page_obj.previous_page_number }}" aria-label="Previous">
+                <a class="page-link" href="?{% query_transform request page=page_obj.previous_page_number %}" aria-label="Previous">
                   <span aria-hidden="true"><i class="fa fa-angle-double-left" aria-hidden="true"></i></span>
                 </a>
               </li>
@@ -18,13 +20,13 @@
                 </li>
               {% else %}
                 <li class="page-item active">
-                  <a href="?page={{ i }}"><span class="page-link">{{ i }}</span></a>
+                  <a href="?{% query_transform request page=i %}"><span class="page-link">{{ i }}</span></a>
                 </li>
               {% endif %}
             {% endfor %}
             {% if page_obj.has_next %}
               <li>
-                <a class="page-link" href="?page= {{ page_obj.next_page_number }}" aria-label="Next">
+                <a class="page-link" href="?{% query_transform request page=page_obj.next_page_number %}" aria-label="Next">
                   <span aria-hidden="true"><i class="fa fa-angle-double-right" aria-hidden="true"></i></span>
                 </a>
               </li>
