@@ -2736,6 +2736,7 @@ progress {
   appearance: none;
   border-radius: 0.5rem;
   transition: box-shadow 0.15s ease, border-color 0.15s ease;
+  margin-right: 7.5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3712,7 +3713,7 @@ fieldset:disabled .btn {
 
 .btn-info {
   --bs-btn-color: #000;
-  --bs-btn-bg: #17c1e8;
+  --bs-btn-bg: #6f42c1;
   --bs-btn-border-color: #17c1e8;
   --bs-btn-hover-color: #000;
   --bs-btn-hover-bg: #3acaeb;
@@ -5621,7 +5622,7 @@ fieldset:disabled .btn {
 .badge {
   --bs-badge-padding-x: 0.9em;
   --bs-badge-padding-y: 0.55em;
-  --bs-badge-font-size: 0.75em;
+  --bs-badge-font-size: 0.40em;
   --bs-badge-font-weight: 700;
   --bs-badge-color: #fff;
   --bs-badge-border-radius: 0.45rem;
