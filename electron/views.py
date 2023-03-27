@@ -173,6 +173,7 @@ class SearchProduct(generic.ListView):
         return super().get_queryset()
 
 
+@login_required
 def delete_from_cart_view(request, pk):
     if request.method == 'POST':
         CartItem.delete_item_from_cart(request.user.id, pk)
