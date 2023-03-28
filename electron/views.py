@@ -37,12 +37,19 @@ class CategoryList(generic.ListView):
 
 class ProductList(generic.ListView):
     model = Product
-    paginate_by = 12
+    paginate_by = 8
 
     def get_queryset(self):
         queryset = Product.objects.filter(
             category__pk=self.kwargs["pk"]
         )
+        name = self.request.GET.get("name")
+        if name:
+            return queryset.filter(
+                Q(name__icontains=name) |
+                Q(description__icontains=name)
+            )
+
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -159,7 +166,7 @@ class OrderList(LoginRequiredMixin, generic.ListView):
 
 class SearchProduct(generic.ListView):
     model = Product
-    paginate_by = 12
+    paginate_by = 8
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
