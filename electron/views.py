@@ -40,20 +40,21 @@ class ProductList(generic.ListView):
     paginate_by = 12
 
     def get_queryset(self):
-        queryset = (
-            super().get_queryset().filter(category_id=self.kwargs.get("pk"))
-            .prefetch_related("images")
+        queryset = Product.objects.filter(
+            category__pk=self.kwargs["pk"]
         )
-        print(queryset.query)
-
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+
         context["items_in_cart"] = get_count_items(self.request.user.id)
+
         context["category_name"] = Category.objects.get(
             pk=self.kwargs["pk"]).name
+
         context["category_id"] = self.kwargs["pk"]
+
         name = self.request.GET.get("name", "")
         context["search_form"] = ProductSearchForm(
             initial={"name": name}
