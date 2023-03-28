@@ -14,7 +14,8 @@ class AddToCartForm(ModelForm):
                 'autocomplete': 'off',
                 'pattern': '[0-9]+',
                 'title': 'Enter numbers Only ',
-                "placeholder": "Enter a number"
+                "placeholder": "Enter a number",
+                "min": 0,
             }
         ))
 
@@ -22,10 +23,11 @@ class AddToCartForm(ModelForm):
         model = CartItem
         fields = ["amount"]
 
-    def clean_license_number(self):
-        number = self.cleaned_data["license_number"]
-        if number < 1:
-            raise ValidationError("License number should consist of 8 characters")
+    def clean_amount(self):
+        amount = self.cleaned_data["amount"]
+        if int(amount) < 1:
+            raise ValidationError("Amount must be 1 or greater")
+        return amount
 
 
 class ProductSearchForm(forms.Form):

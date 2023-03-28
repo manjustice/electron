@@ -40,7 +40,11 @@ class ProductList(generic.ListView):
     paginate_by = 12
 
     def get_queryset(self):
-        queryset = super().get_queryset().filter(category_id=self.kwargs.get("pk"))
+        queryset = (
+            super().get_queryset().filter(category_id=self.kwargs.get("pk"))
+            .prefetch_related("images")
+        )
+        print(queryset.query)
 
         return queryset
 
@@ -50,7 +54,10 @@ class ProductList(generic.ListView):
         context["category_name"] = Category.objects.get(
             pk=self.kwargs["pk"]).name
         context["category_id"] = self.kwargs["pk"]
-        context["search_form"] = ProductSearchForm()
+        name = self.request.GET.get("name", "")
+        context["search_form"] = ProductSearchForm(
+            initial={"name": name}
+        )
 
         return context
 
@@ -103,7 +110,7 @@ def cart_view(request):
         cart_items.select_related("product")
 
         sum_cart = (
-            CartItem.objects.filter(cart=cart).select_related("product")
+            CartItem.objects.filter(cart=cart)
             .annotate(item_price=Sum(F('amount') * F('product__price')))
             .aggregate(total_price=Sum('item_price'))['total_price']
         )
