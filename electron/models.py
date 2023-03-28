@@ -35,6 +35,10 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    cover_image = models.ImageField(
+        upload_to="images/products/covers",
+        null=True
+    )
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
@@ -44,9 +48,9 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-    def get_first_image(self):
+    def get_cover(self):
         try:
-            return self.images.first().image
+            return self.images.filter(is_cover=True).first().image
         except AttributeError:
             return None
 
@@ -103,7 +107,7 @@ class OrderItem(models.Model):
         on_delete=models.CASCADE,
         related_name="order_item"
     )
-    amount = models.IntegerField(default=0)
+    amount = models.IntegerField()
 
 
 class CartItem(models.Model):
