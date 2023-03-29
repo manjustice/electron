@@ -16,7 +16,7 @@
                   <a href="{% url "electron:product-detail" pk=product.id %}">
                     <div class="p-3 text-center">
                       {% if product.cover_image %}
-                        <img src="/{{ product.cover_image }}" alt="">
+                        <img src="{{ product.cover_image.url }}" alt="">
                       {% else %}
                         <img src="/File-No-Image-Placeholder.jpg" alt="">
                       {% endif %}

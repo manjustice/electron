@@ -2,6 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import RegexValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from flake8.defaults import SELECT
 
 
 class User(AbstractUser):

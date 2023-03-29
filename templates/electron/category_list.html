@@ -16,7 +16,7 @@
                   <div class="col-md-4 position-relative">
                     <a href="{% url "electron:product-list" pk=obj.id %}">
                       <div class="p-3 text-center">
-                        <img src="/{{ obj.image }}" alt="">
+                        <img src="{{ obj.image.url }}" alt="">
                         <h5 class="mt-3">{{ obj.name }}</h5>
                       </div>
                     </a>

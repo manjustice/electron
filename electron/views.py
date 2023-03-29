@@ -14,6 +14,9 @@ from .forms import AddToCartForm, ProductSearchForm
 class CategoryList(generic.ListView):
     model = Category
 
+    def get_queryset(self):
+        return super().get_queryset().order_by('id')
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
         categories = context["category_list"]

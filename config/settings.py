@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 
+import dj_database_url
+import cloudinary_storage
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-!%t&+d0^qxp^@l$-l2@1f-h!$fv1qa4d%5vg2k#59u^ij%09hx"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["127.0.0.1"]
 
@@ -39,6 +42,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'cloudinary',
+    "cloudinary_storage",
     "debug_toolbar",
     "crispy_forms",
     "crispy_bootstrap4",
@@ -88,6 +93,9 @@ DATABASES = {
     }
 }
 
+# dj-database-dj
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES["default"].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -124,15 +132,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-MEDIA_URL = "/"
-
-MEDIA_ROOT = BASE_DIR / "media"
-
 STATIC_URL = "static/"
 
 STATICFILES_DIRS = (BASE_DIR / "static",)
 
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = BASE_DIR / "staticfiles/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -146,3 +150,11 @@ LOGOUT_REDIRECT_URL = "/"
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+DEFAULT_FILE_STORAGE = "storages.backends.dropbox.DropBoxStorage"
+# DROPBOX_ACCESS_TOKEN = ""
+DROPBOX_OAUTH2_TOKEN = "sl.Bbhh6xpVA37lgW9Zg6kMzMG2Xk4ysIeJ28ac9p6_GNp0R2cZmzIq8tAk92LA_AefBndEtJc1sicfmqCHHvVusRcBH8EgfCWXVVVuiuYOgcETj61dWewu3DlmSBkb9mXkOhYHl-DpT5ci"
+# DROPBOX_ROOT_PATH = "media"
