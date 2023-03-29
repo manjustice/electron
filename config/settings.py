@@ -11,9 +11,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 import dj_database_url
-import cloudinary_storage
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,10 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-!%t&+d0^qxp^@l$-l2@1f-h!$fv1qa4d%5vg2k#59u^ij%09hx"
+SECRET_KEY = os.environ["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = "RENDER" not in os.environ
 
 ALLOWED_HOSTS = ["127.0.0.1"]
 
@@ -42,8 +42,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'cloudinary',
-    "cloudinary_storage",
     "debug_toolbar",
     "crispy_forms",
     "crispy_bootstrap4",
@@ -53,6 +51,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -154,7 +153,6 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-DEFAULT_FILE_STORAGE = "storages.backends.dropbox.DropBoxStorage"
-# DROPBOX_ACCESS_TOKEN = ""
-DROPBOX_OAUTH2_TOKEN = "sl.Bbhh6xpVA37lgW9Zg6kMzMG2Xk4ysIeJ28ac9p6_GNp0R2cZmzIq8tAk92LA_AefBndEtJc1sicfmqCHHvVusRcBH8EgfCWXVVVuiuYOgcETj61dWewu3DlmSBkb9mXkOhYHl-DpT5ci"
-# DROPBOX_ROOT_PATH = "media"
+if not DEBUG:
+    DEFAULT_FILE_STORAGE = "storages.backends.dropbox.DropBoxStorage"
+    DROPBOX_OAUTH2_TOKEN = os.environ["DROPBOX_TOKEN"]
