@@ -30,4 +30,4 @@ python manage.py runserver
 
 ## Demo
 
-![Website Interface](https://monosnap.com/file/ejPgsZik3UIF2qHHjqxVuG5kBvDi6t)
+![Website Interface](electron.png)
