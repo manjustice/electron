@@ -11,13 +11,14 @@ class AddToCartForm(ModelForm):
         widget=TextInput(
             attrs={
                 "type": "number",
-                'autocomplete': 'off',
-                'pattern': '[0-9]+',
-                'title': 'Enter numbers Only ',
+                "autocomplete": "off",
+                "pattern": "[0-9]+",
+                "title": "Enter numbers Only ",
                 "placeholder": "Enter a number",
                 "min": 0,
             }
-        ))
+        ),
+    )
 
     class Meta:
         model = CartItem
@@ -35,6 +36,10 @@ class ProductSearchForm(forms.Form):
         max_length=255,
         required=False,
         label="",
-        widget=forms.TextInput(attrs={"placeholder": "Search product by name",
-                                      "class": "form-control"})
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Search product by name",
+                "class": "form-control",
+            }
+        ),
     )

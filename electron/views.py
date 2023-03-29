@@ -7,14 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
-from .models import (
-    Category,
-    Product,
-    Cart,
-    CartItem,
-    Order,
-    OrderItem
-)
+from .models import Category, Product, Cart, CartItem, Order, OrderItem
 from .forms import AddToCartForm, ProductSearchForm
 
 
@@ -25,8 +18,7 @@ class CategoryList(generic.ListView):
         context = super().get_context_data()
         categories = context["category_list"]
         grouped_categories = [
-            categories[i:i + 3]
-            for i in range(0, len(categories), 3)
+            categories[i: i + 3] for i in range(0, len(categories), 3)
         ]
         context["grouped_categories"] = grouped_categories
         context["items_in_cart"] = get_count_items(self.request.user.id)
@@ -40,14 +32,11 @@ class ProductList(generic.ListView):
     paginate_by = 8
 
     def get_queryset(self):
-        queryset = Product.objects.filter(
-            category__pk=self.kwargs["pk"]
-        )
+        queryset = Product.objects.filter(category__pk=self.kwargs["pk"])
         name = self.request.GET.get("name")
         if name:
             return queryset.filter(
-                Q(name__icontains=name) |
-                Q(description__icontains=name)
+                Q(name__icontains=name) | Q(description__icontains=name)
             )
 
         return queryset
@@ -58,14 +47,13 @@ class ProductList(generic.ListView):
         context["items_in_cart"] = get_count_items(self.request.user.id)
 
         context["category_name"] = Category.objects.get(
-            pk=self.kwargs["pk"]).name
+            pk=self.kwargs["pk"]
+        ).name
 
         context["category_id"] = self.kwargs["pk"]
 
         name = self.request.GET.get("name", "")
-        context["search_form"] = ProductSearchForm(
-            initial={"name": name}
-        )
+        context["search_form"] = ProductSearchForm(initial={"name": name})
 
         return context
 
@@ -90,16 +78,13 @@ class ProductDetail(generic.DetailView):
                 amount = form.cleaned_data["amount"]
                 try:
                     cart_item = CartItem.objects.get(
-                        cart=cart[0],
-                        product_id=pk
+                        cart=cart[0], product_id=pk
                     )
                     cart_item.amount += int(amount)
                     cart_item.save()
                 except ObjectDoesNotExist:
                     CartItem.objects.create(
-                        cart=cart[0],
-                        product_id=pk,
-                        amount=amount
+                        cart=cart[0], product_id=pk, amount=amount
                     )
 
             return redirect(url)
@@ -119,14 +104,14 @@ def cart_view(request):
 
         sum_cart = (
             CartItem.objects.filter(cart=cart)
-            .annotate(item_price=Sum(F('amount') * F('product__price')))
-            .aggregate(total_price=Sum('item_price'))['total_price']
+            .annotate(item_price=Sum(F("amount") * F("product__price")))
+            .aggregate(total_price=Sum("item_price"))["total_price"]
         )
         items_in_cart = get_count_items(request.user.id)
         context = {
             "cart_items": cart_items,
             "sum_cart": sum_cart,
-            "items_in_cart": items_in_cart
+            "items_in_cart": items_in_cart,
         }
 
         return render(request, "electron/cart.html", context)
@@ -139,9 +124,7 @@ def cart_view(request):
             order = Order.objects.create(user_id=request.user.id)
             for item in cart_items:
                 OrderItem.objects.create(
-                    order=order,
-                    product_id=item.product_id,
-                    amount=item.amount
+                    order=order, product_id=item.product_id, amount=item.amount
                 )
             cart_items.delete()
         return redirect("electron:cart")
@@ -152,9 +135,11 @@ class OrderList(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        queryset = super().get_queryset().prefetch_related(
-                'order_item', 'order_item__product'
-            )
+        queryset = (
+            super()
+            .get_queryset()
+            .prefetch_related("order_item", "order_item__product")
+        )
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -171,9 +156,7 @@ class SearchProduct(generic.ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         name = self.request.GET.get("name", "")
-        context["search_form"] = ProductSearchForm(
-            initial={"name": name}
-        )
+        context["search_form"] = ProductSearchForm(initial={"name": name})
         context["items_in_cart"] = get_count_items(self.request.user.id)
 
         return context
@@ -181,16 +164,19 @@ class SearchProduct(generic.ListView):
     def get_queryset(self):
         name = self.request.GET.get("name")
         if name:
-            return super().get_queryset().filter(
-                Q(name__icontains=name) |
-                Q(description__icontains=name)
+            return (
+                super()
+                .get_queryset()
+                .filter(
+                    Q(name__icontains=name) | Q(description__icontains=name)
+                )
             )
         return super().get_queryset()
 
 
 @login_required
 def delete_from_cart_view(request, pk):
-    if request.method == 'POST':
+    if request.method == "POST":
         CartItem.delete_item_from_cart(request.user.id, pk)
     return redirect("electron:cart")
 

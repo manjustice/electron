@@ -7,12 +7,11 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     phone_regex = RegexValidator(
         regex=r"^\+?1?\d{9,15}$",
-        message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."
+        message="Phone number must be entered in "
+                "the format: '+999999999'. Up to 15 digits allowed.",
     )
     phone_number = models.CharField(
-        validators=[phone_regex],
-        max_length=20,
-        blank=True
+        validators=[phone_regex], max_length=20, blank=True
     )
 
     def __str__(self):
@@ -36,13 +35,10 @@ class Product(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     cover_image = models.ImageField(
-        upload_to="images/products/covers",
-        null=True
+        upload_to="images/products/covers", null=True
     )
     category = models.ForeignKey(
-        Category,
-        on_delete=models.CASCADE,
-        related_name="product"
+        Category, on_delete=models.CASCADE, related_name="product"
     )
 
     def __str__(self):
@@ -58,22 +54,16 @@ class Product(models.Model):
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     product = models.ManyToManyField(
-        Product,
-        related_name="carts",
-        through="CartItem"
+        Product, related_name="carts", through="CartItem"
     )
 
 
 class Order(models.Model):
     user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name="orders"
+        User, on_delete=models.CASCADE, related_name="orders"
     )
     product = models.ManyToManyField(
-        Product,
-        related_name="orders",
-        through="OrderItem"
+        Product, related_name="orders", through="OrderItem"
     )
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -82,44 +72,33 @@ class Order(models.Model):
 
     def total_sum(self):
         return sum(
-            item.amount * item.product.price
-            for item in self.order_item.all()
+            item.amount * item.product.price for item in self.order_item.all()
         )
 
 
 class Image(models.Model):
     image = models.ImageField(upload_to="images/products/")
     product = models.ForeignKey(
-        Product,
-        on_delete=models.CASCADE,
-        related_name="images"
+        Product, on_delete=models.CASCADE, related_name="images"
     )
 
 
 class OrderItem(models.Model):
     order = models.ForeignKey(
-        Order,
-        on_delete=models.CASCADE,
-        related_name="order_item"
+        Order, on_delete=models.CASCADE, related_name="order_item"
     )
     product = models.ForeignKey(
-        Product,
-        on_delete=models.CASCADE,
-        related_name="order_item"
+        Product, on_delete=models.CASCADE, related_name="order_item"
     )
     amount = models.IntegerField()
 
 
 class CartItem(models.Model):
     cart = models.ForeignKey(
-        Cart,
-        on_delete=models.CASCADE,
-        related_name="cart_item"
+        Cart, on_delete=models.CASCADE, related_name="cart_item"
     )
     product = models.ForeignKey(
-        Product,
-        on_delete=models.CASCADE,
-        related_name="cart_item"
+        Product, on_delete=models.CASCADE, related_name="cart_item"
     )
     amount = models.IntegerField()
 
@@ -134,8 +113,7 @@ class CartItem(models.Model):
     def delete_item_from_cart(user_id, product_id):
         try:
             cart_item = CartItem.objects.get(
-                cart__user_id=user_id,
-                product__id=product_id
+                cart__user_id=user_id, product__id=product_id
             )
             cart_item.delete()
         except ObjectDoesNotExist:
