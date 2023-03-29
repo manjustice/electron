@@ -4,7 +4,10 @@ Django project where you can "buy" some stuff
 
 ## Check it out
 
-[Shop Electron Project deployed to Render](link)
+[Shop Electron Project deployed to Render](https://electron-cish.onrender.com/)
+Test user:
+Login: user
+Password: user123456
 
 ## Installation
 
