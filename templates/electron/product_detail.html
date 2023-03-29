@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
   {{ product.name }} - Electron
@@ -28,7 +29,7 @@
                                 {% endfor %}
                                {% else %}
                                   <div class="carousel-item active">
-                                    <img src="/File-No-Image-Placeholder.jpg" alt="">
+                                    <img src="{% static 'img/File-No-Image-Placeholder.jpg' %}" alt="">
                                   </div>
                               {% endif %}
                           </div>
