@@ -140,7 +140,7 @@ class OrderList(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         queryset = (
             super()
-            .get_queryset()
+            .get_queryset().filter(user_id=self.request.user.id)
             .prefetch_related("order_item", "order_item__product")
         )
         return queryset
