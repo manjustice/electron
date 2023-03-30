@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 
+import cloudinary_storage
 import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "debug_toolbar",
+    "cloudinary_storage",
     "crispy_forms",
     "crispy_bootstrap4",
     "electron",
@@ -150,9 +152,15 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
+# Media configuration when debugging
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+# Configuration cloud storage for media files
 if not DEBUG:
-    DEFAULT_FILE_STORAGE = "storages.backends.dropbox.DropBoxStorage"
-    DROPBOX_OAUTH2_TOKEN = os.environ["DROPBOX_TOKEN"]
+    CLOUDINARY_STORAGE = {
+        "CLOUD_NAME": "daxvkqzjb",
+        "API_KEY": "345789486478129",
+        "API_SECRET": os.environ["CLOUDINARY_SECRET"],
+    }
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
