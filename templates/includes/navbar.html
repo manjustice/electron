@@ -12,47 +12,51 @@
     </button>
     <div class="collapse navbar-collapse w-100 pt-3 pb-2 py-lg-0" id="navigation">
       <ul class="navbar-nav navbar-nav-hover mx-auto">
-        <li class="nav-item mx-2">
+        <li class="nav-item mx-3">
           <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" role="button" href="{% url "electron:category-list" %}">
             Catalog
           </a>
         </li>
+      <li class="nav-item mx-3">
        <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" role="button" href="{% url "electron:cart" %}">
-        <li class="nav-item mx-2">
+
             Shopping cart
-        </li>
          {% if user.is_authenticated %}
             <h7 class="cart-count">
                 {{ items_in_cart }}
             </h7>
           {% endif %}
        </a>
+      </li>
         {% if user.is_authenticated %}
 
-          <li class="nav-item mx-2">
+          <li class="nav-item mx-3">
             <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" role="button" href="{% url 'electron:orders' %}">
               Orders
             </a>
           </li>
 
-          <li class="nav-item dropdown dropdown-hover mx-2">
+          <li class="nav-item dropdown dropdown-hover mx-3">
             <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" role="button" href="{% url 'logout' %}">
               Logout
             </a>
           </li>
         {% else %}
-          <li class="nav-item dropdown dropdown-hover mx-2">
+          <li class="nav-item dropdown dropdown-hover mx-3">
             <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" role="button" href="{% url "login" %}">
               SignIn
             </a>
           </li>
-          <li class="nav-item dropdown dropdown-hover mx-2">
+          <li class="nav-item dropdown dropdown-hover mx-3">
             <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" role="button" href="{% url "registration" %}">
               SignUp
             </a>
           </li>
         {% endif %}
       </ul>
+        <a class="nav-link pe-1" href="https://github.com/manjustice" target="_blank">
+          <i class="fab fa-github text-lg opacity-10"></i>
+        </a>
     </div>
   </div>
 </nav>
