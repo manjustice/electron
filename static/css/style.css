@@ -7,3 +7,7 @@
     color: #fff;
     text-align: center;
 }
+
+.bg-image-main{
+    background-image: url("/static/img/main-background.jpg");
+}
