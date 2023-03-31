@@ -21,7 +21,8 @@ Python3 must be already installed
 git clone https://github.com/manjustice/shop_electron.git
 cd shop_electron
 python -m venv venv
-source venv/bin/activate
+source venv/bin/activate (on Linux/maOS)
+venv\Scripts\activate (on Windows)
 pip install -r requirements.txt
 python manage.py runserver
 ```
