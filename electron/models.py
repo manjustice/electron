@@ -2,7 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import RegexValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from flake8.defaults import SELECT
+from django.db.models import QuerySet
 
 
 class User(AbstractUser):
@@ -15,7 +15,7 @@ class User(AbstractUser):
         validators=[phone_regex], max_length=20, blank=True
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.username
 
 
@@ -27,7 +27,7 @@ class Category(models.Model):
         verbose_name = "category"
         verbose_name_plural = "categories"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -42,14 +42,8 @@ class Product(models.Model):
         Category, on_delete=models.CASCADE, related_name="product"
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
-
-    def get_cover(self):
-        try:
-            return self.images.filter(is_cover=True).first().image
-        except AttributeError:
-            return None
 
 
 class Cart(models.Model):
@@ -71,7 +65,7 @@ class Order(models.Model):
     class Meta:
         ordering = ["-created_at"]
 
-    def total_sum(self):
+    def total_sum(self) -> int:
         return sum(
             item.amount * item.product.price for item in self.order_item.all()
         )
@@ -107,11 +101,11 @@ class CartItem(models.Model):
         ordering = ["product__name"]
 
     @staticmethod
-    def count_items_in_cart(user_id):
+    def count_items_in_cart(user_id: int) -> int:
         return CartItem.objects.filter(cart__user_id=user_id).count()
 
     @staticmethod
-    def delete_item_from_cart(user_id, product_id):
+    def delete_item_from_cart(user_id: int, product_id: int) -> None:
         try:
             cart_item = CartItem.objects.get(
                 cart__user_id=user_id, product__id=product_id

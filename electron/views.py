@@ -1,4 +1,5 @@
-from django.db.models import Sum, F, Q
+from django.db.models import Sum, F, Q, QuerySet
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import generic
@@ -13,15 +14,17 @@ from .forms import AddToCartForm, ProductSearchForm
 
 class CategoryList(generic.ListView):
     model = Category
+    ROW_LENGTH = 3
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         return super().get_queryset().order_by('id')
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super().get_context_data()
         categories = context["category_list"]
         grouped_categories = [
-            categories[i: i + 3] for i in range(0, len(categories), 3)
+            categories[i: i + self.ROW_LENGTH]
+            for i in range(0, len(categories), self.ROW_LENGTH)
         ]
         context["grouped_categories"] = grouped_categories
         context["items_in_cart"] = get_count_items(self.request.user.id)
@@ -34,9 +37,9 @@ class ProductList(generic.ListView):
     model = Product
     paginate_by = 8
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         queryset = Product.objects.filter(category__pk=self.kwargs["pk"])
-        name = self.request.GET.get("name")
+        name = get_user_search(self.request)
         if name:
             return queryset.filter(
                 Q(name__icontains=name) | Q(description__icontains=name)
@@ -44,7 +47,7 @@ class ProductList(generic.ListView):
 
         return queryset
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
 
         context["items_in_cart"] = get_count_items(self.request.user.id)
@@ -55,8 +58,9 @@ class ProductList(generic.ListView):
 
         context["category_id"] = self.kwargs["pk"]
 
-        name = self.request.GET.get("name", "")
-        context["search_form"] = ProductSearchForm(initial={"name": name})
+        context["search_form"] = ProductSearchForm(
+            initial={"name": get_user_search(self.request)}
+        )
 
         return context
 
@@ -64,14 +68,14 @@ class ProductList(generic.ListView):
 class ProductDetail(generic.DetailView):
     model = Product
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
         context["form"] = AddToCartForm
         context["items_in_cart"] = get_count_items(self.request.user.id)
 
         return context
 
-    def post(self, request, pk=None):
+    def post(self, request, pk=None) -> HttpResponse:
         if request.user.is_authenticated:
             url = reverse_lazy("electron:product-detail", kwargs={"pk": pk})
             form = AddToCartForm(request.POST)
@@ -95,7 +99,7 @@ class ProductDetail(generic.DetailView):
 
 
 @login_required
-def cart_view(request):
+def cart_view(request) -> HttpResponse:
     if request.method == "GET":
         try:
             cart = Cart.objects.get(user_id=request.user.id)
@@ -137,7 +141,7 @@ class OrderList(LoginRequiredMixin, generic.ListView):
     model = Order
     paginate_by = 5
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         queryset = (
             super()
             .get_queryset().filter(user_id=self.request.user.id)
@@ -145,7 +149,7 @@ class OrderList(LoginRequiredMixin, generic.ListView):
         )
         return queryset
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
         context["items_in_cart"] = get_count_items(self.request.user.id)
 
@@ -156,16 +160,17 @@ class SearchProduct(generic.ListView):
     model = Product
     paginate_by = 8
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, *, object_list=None, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
-        name = self.request.GET.get("name", "")
-        context["search_form"] = ProductSearchForm(initial={"name": name})
+        context["search_form"] = ProductSearchForm(
+            initial={"name": get_user_search(self.request)}
+        )
         context["items_in_cart"] = get_count_items(self.request.user.id)
 
         return context
 
-    def get_queryset(self):
-        name = self.request.GET.get("name")
+    def get_queryset(self) -> QuerySet:
+        name = get_user_search(self.request)
         if name:
             return (
                 super()
@@ -178,7 +183,7 @@ class SearchProduct(generic.ListView):
 
 
 @login_required
-def delete_from_cart_view(request, pk):
+def delete_from_cart_view(request, pk: int) -> HttpResponse:
     if request.method == "POST":
         CartItem.delete_item_from_cart(request.user.id, pk)
     return redirect("electron:cart")
@@ -190,3 +195,8 @@ def get_count_items(user_id: int = None) -> int:
         items_in_cart = CartItem.count_items_in_cart(user_id)
 
     return items_in_cart
+
+
+def get_user_search(request) -> str:
+    name = request.GET.get("name", "")
+    return name

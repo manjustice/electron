@@ -49,7 +49,28 @@
             <div class="col-12 mx-auto">
                 <form action="" method="post" style="display: block; margin-left: auto; margin-right: auto;">
                   {% csrf_token %}
-                  <button class="btn btn-info" type="submit">Make a Purchase</button>
+                  <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modal-default">Make a Purchase</button>
+                  <!-- Modal Content -->
+                    <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h2 class="h6 modal-title">Confirm purchase</h2>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Do you confirm the purchase?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-info">Confirm</button>
+                                    <button type="button" class="btn btn-link ms-auto"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
           </div>
@@ -57,4 +78,5 @@
       {% else %}
         <h2 style="text-align: center; margin-top: 10rem;">You don't have any products in cart</h2>
     {% endif %}
+
 {% endblock %}

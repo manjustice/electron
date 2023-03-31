@@ -159,8 +159,8 @@ MEDIA_ROOT = BASE_DIR / "media"
 # Configuration cloud storage for media files
 if not DEBUG:
     CLOUDINARY_STORAGE = {
-        "CLOUD_NAME": "daxvkqzjb",
-        "API_KEY": "345789486478129",
+        "CLOUD_NAME": os.environ["CLOUD_NAME"],
+        "API_KEY": os.environ["API_KEY"],
         "API_SECRET": os.environ["CLOUDINARY_SECRET"],
     }
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
