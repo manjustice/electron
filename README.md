@@ -25,6 +25,7 @@ source venv/bin/activate (on Linux/maOS)
 venv\Scripts\activate (on Windows)
 pip install -r requirements.txt
 export SECRET_KEY="<your_secret_key>"
+python manage.py migrate
 python manage.py runserver
 ```
 
