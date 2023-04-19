@@ -81,18 +81,13 @@ class ProductDetail(generic.DetailView):
             form = AddToCartForm(request.POST)
             user_id = request.user.id
             if form.is_valid() and pk:
-                cart = Cart.objects.get_or_create(user_id=user_id)
+                cart, _ = Cart.objects.get_or_create(user_id=user_id)
                 amount = form.cleaned_data["amount"]
-                try:
-                    cart_item = CartItem.objects.get(
-                        cart=cart[0], product_id=pk
-                    )
-                    cart_item.amount += int(amount)
-                    cart_item.save()
-                except ObjectDoesNotExist:
-                    CartItem.objects.create(
-                        cart=cart[0], product_id=pk, amount=amount
-                    )
+                cart_item, _ = CartItem.objects.get_or_create(
+                        cart=cart, product_id=pk
+                )
+                cart_item.amount += int(amount)
+                cart_item.save()
 
             return redirect(url)
         return redirect("login")
@@ -101,10 +96,7 @@ class ProductDetail(generic.DetailView):
 @login_required
 def cart_view(request) -> HttpResponse:
     if request.method == "GET":
-        try:
-            cart = Cart.objects.get(user_id=request.user.id)
-        except ObjectDoesNotExist:
-            cart = Cart.objects.create(user_id=request.user.id)
+        cart, _ = Cart.objects.get_or_create(user_id=request.user.id)
 
         cart_items = CartItem.objects.filter(cart=cart)
         cart_items.select_related("product")

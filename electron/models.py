@@ -95,7 +95,7 @@ class CartItem(models.Model):
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, related_name="cart_item"
     )
-    amount = models.IntegerField()
+    amount = models.IntegerField(default=0)
 
     class Meta:
         ordering = ["product__name"]
