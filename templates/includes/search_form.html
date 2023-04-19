@@ -1,0 +1,26 @@
+<section class="py-7">
+  <div class="container">
+    <div class="row justify-space-between py-2">
+      <div class="col-lg-4 mx-auto">
+        <form action="
+               {% if category_name %}
+                  {% url "electron:product-list" pk=category_id %}
+                {% else %}
+                  {% url "electron:search" %}
+                {% endif %}
+              " method="get" class="form-inline">
+          <div class="input-group mb-4">
+            <div class="input-group">
+                <div class="form-outline">
+                  {{ search_form }}
+                </div>
+                <button class="btn btn-info">
+                  <i class="fas fa-search"></i>
+                </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

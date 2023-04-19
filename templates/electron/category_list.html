@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Electron - Online Electronic Shopping
+{% endblock %}
+
+{% block content %}
+
+  {% include "includes/search_form.html" %}
+
+  <div class="container">
+      <div class="row">
+          <div class="row">
+            {% for group in grouped_categories %}
+              {% for obj in group %}
+                  <div class="col-md-4 position-relative">
+                    <a href="{% url "electron:product-list" pk=obj.id %}">
+                      <div class="p-3 text-center">
+                        <img src="{{ obj.image.url }}" alt="">
+                        <h5 class="mt-3">{{ obj.name }}</h5>
+                      </div>
+                    </a>
+                    {% if not forloop.last %}
+                      <hr class="vertical dark">
+                    {% endif %}
+                  </div>
+                {% endfor %}
+            {% endfor %}
+          </div>
+      </div>
+  </div>
+
+{% endblock %}

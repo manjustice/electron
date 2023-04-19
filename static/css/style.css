@@ -1,0 +1,13 @@
+.cart-count {
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+
+    background: #8C92AC;
+    color: #fff;
+    text-align: center;
+}
+
+.bg-image-main{
+    background-image: url("/static/img/main-background.jpg");
+}
